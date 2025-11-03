@@ -1,10 +1,6 @@
-/* ===========================
-   Estilo Geral do Frontend
-   =========================== */
-
 body {
-  background-color: #0f172a; /* azul escuro elegante */
-  color: #f8fafc; /* texto branco suave */
+  background-color: #0f172a; 
+  color: #f8fafc;
   font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
@@ -14,7 +10,7 @@ body {
   max-width: 800px;
   margin: 2rem auto;
   padding: 2rem;
-  background: #1e293b; /* container mais claro */
+  background: #1e293b;
   border-radius: 16px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 }
@@ -22,7 +18,7 @@ body {
 h1 {
   text-align: center;
   margin-bottom: 2rem;
-  color: #38bdf8; /* azul claro */
+  color: #38bdf8;
 }
 
 section {
@@ -32,7 +28,7 @@ section {
 }
 
 h2 {
-  color: #fbbf24; /* amarelo destaque */
+  color: #fbbf24;
   font-size: 1.2rem;
   margin-bottom: 1rem;
 }
@@ -66,7 +62,7 @@ button {
   font-size: 1rem;
   font-weight: bold;
   color: white;
-  background-color: #10b981; /* verde */
+  background-color: #10b981;
   border: none;
   border-radius: 12px;
   cursor: pointer;

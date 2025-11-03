@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useState } from "react";
 import "./App.css";
 
@@ -58,19 +57,19 @@ export default function App() {
         const txt = await res.text();
         throw new Error(txt || "Erro ao enviar config");
       }
-      setStatus("✅ Config enviada. O sistema iniciará a partir dessa configuração.");
+      setStatus("Config enviada. O sistema iniciará a partir dessa configuração.");
     } catch (err) {
       console.error(err);
-      setStatus("❌ Erro ao enviar config. Veja console.");
+      setStatus("Erro ao enviar config. Veja console.");
     }
   }
 
   return (
     <div className="App" style={{ maxWidth: 900, margin: "2rem auto", padding: 20 }}>
-      <h1>🧠 Painel MAS - Configuração</h1>
+      <h1>Painel MAS - Configuração</h1>
 
       <section>
-        <h2>⚙️ Negociação</h2>
+        <h2>Negociação</h2>
         <label>
           Máx. Rodadas:
           <input type="number" value={negotiationMaxRounds} onChange={(e) => setNegotiationMaxRounds(e.target.value)} />
@@ -82,7 +81,7 @@ export default function App() {
       </section>
 
       <section>
-        <h2>🛒 Buyer (Comprador)</h2>
+        <h2>Buyer (Comprador)</h2>
         <label>Acceptance Threshold:
           <input type="number" step="0.01" value={buyerThreshold} onChange={(e) => setBuyerThreshold(e.target.value)} />
         </label>
@@ -95,7 +94,7 @@ export default function App() {
       </section>
 
       <section>
-        <h2>📊 Pesos do Comprador</h2>
+        <h2>Pesos do Comprador</h2>
         <label>Preço:
           <input type="number" step="0.01" value={wPrice} onChange={(e) => setWPrice(e.target.value)} />
         </label>
@@ -111,7 +110,7 @@ export default function App() {
       </section>
 
       <section>
-        <h2>🏭 Seller (Vendedor)</h2>
+        <h2>Seller (Vendedor)</h2>
         <label>Acceptance Threshold:
           <input type="number" step="0.01" value={sellerThreshold} onChange={(e) => setSellerThreshold(e.target.value)} />
         </label>
@@ -125,7 +124,7 @@ export default function App() {
 
       <div style={{ marginTop: 16 }}>
         <button onClick={sendConfig} style={{ padding: "10px 16px", background: "#10b981", color: "#fff", border: "none", borderRadius: 8 }}>
-          🚀 Enviar Configuração
+          Enviar Configuração
         </button>
       </div>
 
