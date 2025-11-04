@@ -5,13 +5,13 @@
 **Frente de Pesquisa**: Logística e cadeia de suprimentos<br>
 
 ## Alunos
-|Matrícula | Aluno |
-| -- | -- |
-| xx/xxxxxx  |  Artur Henrique Holz Bartz |
-| 22/1022248  |  Carlos Eduardo Mota Alves |
-| xx/xxxxxx  | Matheus Calixto Vaz Pinheiro |
-| xx/xxxxxx  |  Pedro Lucas Garcia |
-| xx/xxxxxx  |  Vitor Féijo Leonardo |
+| Matrícula  | Aluno                        |
+| ---------- | ---------------------------- |
+| 22/1007869 | Artur Henrique Holz Bartz    |
+| 22/1022248 | Carlos Eduardo Mota Alves    |
+| 19/0055201 | Matheus Calixto Vaz Pinheiro |
+| 19/0115548 | Pedro Lucas Garcia           |
+| 22/1008516 | Vitor Féijo Leonardo         |
 
 ## Sobre 
 Nosso projeto é a implementação melroada em alugn pontos do artifo ()[], que não contém a implementação então nos propomos a implementar, mas basicamente é um sitam multi agente para determiarn o melhor fornecedor dado um conjto de fornecedores, ele utilza parametrso como precço, qualidade ... e vê a sinergia dos produtos coisa que outros artigos não tem e determina um fornecedor vencedor par um conjunto de produtos.
