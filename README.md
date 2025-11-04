@@ -1,46 +1,64 @@
-# RepositorioTemplate
-Esse repositório é para ser utilizado pelos grupos como um template inicial, da home page do Projeto.
-As seções do Template NÃO DEVEM SER OMITIDAS, sendo TODAS RELEVANTES.
-
-**!! *Atenção: Renomeie o seu repositório para (Ano.Semestre)_(Grupo)_SMA_(NomeDaFrenteDePesquisa)*. !!** 
-
-**!! *Não coloque os nomes dos alunos no título do repositório*. !!**
-
-**!! *Exemplo de título correto: 2025.2_G1_SMA_ProjetoComportamentoEmergente*. !!**
- 
- (Apague esses comentários)
-
 # NomeDoProjeto
 
 **Disciplina**: FGA0053 - Sistemas Multiagentes <br>
-**Nro do Grupo (de acordo com a Planilha de Divisão dos Grupos)**: XX<br>
-**Frente de Pesquisa**: XXXXXXXXXX<br>
+**Nro do Grupo (de acordo com a Planilha de Divisão dos Grupos)**: 01<br>
+**Frente de Pesquisa**: Logística e cadeia de suprimentos<br>
 
 ## Alunos
-|Matrícula | Aluno |
-| -- | -- |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| Matrícula  | Aluno                        |
+| ---------- | ---------------------------- |
+| 22/1007869 | Artur Henrique Holz Bartz    |
+| 22/1022248 | Carlos Eduardo Mota Alves    |
+| 19/0055201 | Matheus Calixto Vaz Pinheiro |
+| 19/0115548 | Pedro Lucas Garcia           |
+| 22/1008516 | Vitor Féijo Leonardo         |
 
 ## Sobre 
-Descreva o seu projeto em linhas gerais. 
-Use referências, links, que permitam conhecer um pouco mais sobre o projeto.
-Capriche nessa seção, pois ela é a primeira a ser lida pelos interessados no projeto.
+Nosso projeto é a implementação melroada em alugn pontos do artifo ()[], que não contém a implementação então nos propomos a implementar, mas basicamente é um sitam multi agente para determiarn o melhor fornecedor dado um conjto de fornecedores, ele utilza parametrso como precço, qualidade ... e vê a sinergia dos produtos coisa que outros artigos não tem e determina um fornecedor vencedor par um conjunto de produtos.
 
 ## Screenshots
 Adicione 2 ou mais screenshots do projeto em termos de interface e/ou funcionamento.
 
 ## Instalação 
-**Linguagens**: xxxxxx<br>
-**Tecnologias**: xxxxxx<br>
-Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
-Insira um manual ou um script para auxiliar ainda mais.
-Gifs animados e outras ilustrações são bem-vindos!
+- **Linguagem:** Java 11 e Javascript
+- **Tecnologias:** Maven,JADE e React.
+
+Primeiro instale as dependências do projeto:
+
+```bash
+mvn install:install-file \
+  -Dfile=lib/jade.jar \
+  -DgroupId=com.tilab.jade \
+  -DartifactId=jade \
+  -Dversion=4.5.0 \
+  -Dpackaging=jar
+```
+
+Em outro terminal:
+
+```bash
+cd mas-config-frontend
+npm install
+```
+
+Depois, para construir o projeto, utilize o comando:
+
+```bash
+mvn clean package
+```
+
+```bash
+npm run dev
+```
+
+Então , para executar o projeto, utilize o comando:
+
+```bash
+java -jar target/agentes-negociacao-1.0.0.jar
+```
 
 ## Uso 
-Explique como usar seu projeto.
-Procure ilustrar em passos, com apoio de telas do software, seja com base na interface gráfica, seja com base no terminal.
-Nessa seção, deve-se revelar de forma clara sobre o funcionamento do software.
+O uso é simples defini seus parametros e aguarde o vencedor.
 
 ## Vídeo
 Adicione 1 ou mais vídeos com a execução do projeto.
