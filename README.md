@@ -61,7 +61,7 @@ java -jar target/agentes-negociacao-1.0.0.jar
 O uso é simples defini seus parametros e aguarde o vencedor.
 
 ## Vídeo
-(Vídeo da apresentação)[https://youtu.be/SEqmFE10yeE]
+[Vídeo da apresentação](https://youtu.be/SEqmFE10yeE)
 
 
 ## Participações
