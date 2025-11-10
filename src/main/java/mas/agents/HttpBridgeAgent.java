@@ -151,7 +151,6 @@ public class HttpBridgeAgent extends Agent {
             addCors(exchange);
 
             try {
-                // Envia mensagem para o TDA forçar o envio imediato de uma demanda
                 ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                 msg.addReceiver(new AID("tda", AID.ISLOCALNAME));
                 msg.setContent("URGENT_DEMAND_CHANGE");

@@ -27,8 +27,6 @@ public class TaskDecomposerAgent extends Agent {
 
     protected void setup() {
         logger.info("Dynamic TDA {} setup started.", getAID().getName());
-
-        // Envia a primeira demanda imediatamente ao iniciar
         addBehaviour(new OneShotBehaviour() {
             @Override
             public void action() {

@@ -63,11 +63,8 @@ public class CoordinatorAgent extends Agent {
 
             String content = msg.getContent();
             logger.info("🎯 CA RECEIVED define-task message: {}", content);
-
-            // If content is START or empty, load config and use static demand; otherwise parse products
             if (content == null || content.trim().isEmpty() || "START".equalsIgnoreCase(content.trim())) {
                 loadConfigProperties();
-                // default static demand (if your system defines other static product list, adapt here)
                 productDemand = new int[]{1, 1, 1, 1};
                 logger.info("CA: Using fallback static product demand: {}", Arrays.toString(productDemand));
             } else {
@@ -76,8 +73,6 @@ public class CoordinatorAgent extends Agent {
 
             negotiationResults.clear();
             finishedCounter = 0;
-
-            // request bundles and when reply arrives, start negotiations
             myAgent.addBehaviour(new RequestProductBundles());
         }
     }
@@ -95,7 +90,6 @@ public class CoordinatorAgent extends Agent {
             for (String key : p.stringPropertyNames()) {
                 logger.info("   {} = {}", key, p.getProperty(key));
             }
-            // You can use properties to set internal fields if needed.
         } catch (IOException e) {
             logger.error("CA: Error loading config.properties", e);
         }
@@ -141,8 +135,6 @@ public class CoordinatorAgent extends Agent {
                     MessageTemplate.MatchPerformative(ACLMessage.INFORM),
                     MessageTemplate.MatchProtocol(PROTOCOL_GET_BUNDLES)
             );
-
-            // blockingReceive with timeout to prevent hanging forever
             ACLMessage reply = myAgent.blockingReceive(mt, 8000);
             if (reply == null) {
                 logger.warn("CA: No reply from SDA (timeout). Proceeding without preferred bundles.");
@@ -163,8 +155,6 @@ public class CoordinatorAgent extends Agent {
                     logger.error("CA: Failed to read bundles from SDA.", e);
                 }
             }
-
-            // Now start negotiations (buyers creation)
             myAgent.addBehaviour(new StartNegotiations());
         }
     }
@@ -184,8 +174,6 @@ public class CoordinatorAgent extends Agent {
             );
 
             for (AID seller : sellerAgents) createBuyerFor(seller);
-
-            // Start waiting results behavior
             myAgent.addBehaviour(new WaitForResults());
         }
     }
@@ -197,8 +185,6 @@ public class CoordinatorAgent extends Agent {
             Object[] args = new Object[]{sellerAgent, getAID()};
             AgentController ac = getContainerController().createNewAgent(buyerName, "mas.agents.BuyerAgent", args);
             ac.start();
-            
-            // Notifica o Sniffer para monitorar o novo BuyerAgent
             addBuyerToSniffer(buyerName);
             
         } catch (StaleProxyException e) {
@@ -241,7 +227,6 @@ public class CoordinatorAgent extends Agent {
                     logger.info("CA: Optimal solution (total utility = {})", tot);
                     for (NegotiationResult r : optimal) logger.info("CA Winner -> {}", r);
                 }
-                // reset to allow new cycles in future (do not stop agent outright)
                 negotiationResults.clear();
                 finishedCounter = 0;
             }
@@ -253,7 +238,6 @@ public class CoordinatorAgent extends Agent {
      */
     private void addBuyerToSniffer(String buyerName) {
         try {
-            // Aguarda um pouco para garantir que o BuyerAgent foi criado
             Thread.sleep(100);
             
             AID snifferAID = new AID("sniffer", AID.ISLOCALNAME);
