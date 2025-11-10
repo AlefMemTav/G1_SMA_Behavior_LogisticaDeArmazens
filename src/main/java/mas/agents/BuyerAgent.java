@@ -216,23 +216,26 @@ public class BuyerAgent extends Agent {
         @Override
         public void action() {
 
-            MessageTemplate idTemplate = MessageTemplate.and(
-                    MessageTemplate.MatchConversationId(negotiationId),
-                    MessageTemplate.MatchInReplyTo(lastMessageReplyWith)
-            );
-
             // Template para Proposta
-            MessageTemplate proposeTemplate = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
-            // Template para Aceitação
-            MessageTemplate acceptTemplate = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
-            // Combina ambos com OR
-            MessageTemplate performativeTemplate = MessageTemplate.or(proposeTemplate, acceptTemplate);
-
-            // Combina com o Remetente (Seller)
-            MessageTemplate mt = MessageTemplate.and(
-                    MessageTemplate.MatchSender(sellerAgent),
-                    MessageTemplate.and(performativeTemplate, idTemplate)
+            MessageTemplate proposeTemplate = MessageTemplate.and(
+                    MessageTemplate.MatchPerformative(ACLMessage.PROPOSE),
+                    MessageTemplate.and(
+                            MessageTemplate.MatchSender(sellerAgent),
+                            MessageTemplate.MatchConversationId(negotiationId)
+                    )
             );
+            
+            // Template para Aceitação
+            MessageTemplate acceptTemplate = MessageTemplate.and(
+                    MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL),
+                    MessageTemplate.and(
+                            MessageTemplate.MatchSender(sellerAgent),
+                            MessageTemplate.MatchConversationId(negotiationId)
+                    )
+            );
+
+            // Combina ambos com OR
+            MessageTemplate mt = MessageTemplate.or(proposeTemplate, acceptTemplate);
 
             ACLMessage msg = myAgent.receive(mt);
 
@@ -241,17 +244,18 @@ public class BuyerAgent extends Agent {
                 receivedProposalMsg = msg; // Armazena a mensagem (seja ela qual for)
 
                 if (msg.getPerformative() == ACLMessage.PROPOSE) {
-                    // logger.debug("{} [R{}]: Received proposal.", myAgent.getLocalName(), currentRound);
+                    logger.info("{} [R{}]: Received PROPOSE from seller.", myAgent.getLocalName(), currentRound);
                     exitValue = 1; // Proposta recebida, ir para EvaluateProposal
                 } else { // Deve ser ACCEPT_PROPOSAL
-                    logger.info("{}: Seller ACCEPTED my last counter-offer.", myAgent.getLocalName());
+                    logger.info("{} [R{}]: Seller ACCEPTED my last counter-offer.", myAgent.getLocalName(), currentRound);
                     if (lastSentCounterBid != null) {
                         finalAcceptedBid = lastSentCounterBid;
                         finalUtility = evalService.calculateUtility("buyer", finalAcceptedBid, weights, issueParams, buyerRiskBeta);
+                        logger.info("{}: Final accepted bid utility = {}", myAgent.getLocalName(), String.format("%.4f", finalUtility));
                     } else {
                         logger.warn("{}: Seller accepted, but lastSentCounterBid is null!", myAgent.getLocalName());
                     }
-                    exitValue = 2;
+                    exitValue = 2; // Vai para END_NEGOTIATION
                 }
 
             } else {
@@ -388,6 +392,15 @@ public class BuyerAgent extends Agent {
                 lastMessageReplyWith = "prop-" + negotiationId + "-" + System.currentTimeMillis();
                 proposeMsg.setReplyWith(lastMessageReplyWith);
                 proposeMsg.setContentObject(counterProposal);
+                
+                // Adiciona conteúdo legível para o Sniffer
+                Object priceValue = counterBid.getIssues().get(0).getValue();
+                String readableContent = String.format("COUNTER-PROPOSAL (Round %d) - Bundle: %s, Counter Price: %s", 
+                    currentRound,
+                    counterBid.getProductBundle().getProducts(), 
+                    priceValue);
+                proposeMsg.addUserDefinedParameter("readable-content", readableContent);
+                
                 myAgent.send(proposeMsg);
                 logger.info("{}: Sent counter-proposal (Round {}) -> {}", myAgent.getLocalName(), currentRound, counterBid.getIssues().get(0));
 
@@ -411,7 +424,24 @@ public class BuyerAgent extends Agent {
             accept.addReceiver(sellerAgent);
             accept.setConversationId(negotiationId);
             accept.setInReplyTo(receivedProposalMsg.getReplyWith());
-            accept.setContent("Offer accepted.");
+            
+            // Mensagem legível para o Sniffer
+            try {
+                Proposal receivedP = (Proposal) receivedProposalMsg.getContentObject();
+                if (!receivedP.getBids().isEmpty()) {
+                    Bid acceptedBid = receivedP.getBids().get(0);
+                    Object priceValue = acceptedBid.getIssues().get(0).getValue();
+                    String content = String.format("OFFER ACCEPTED - Bundle: %s, Accepted Price: %s", 
+                        acceptedBid.getProductBundle().getProducts(), 
+                        priceValue);
+                    accept.setContent(content);
+                } else {
+                    accept.setContent("Offer accepted.");
+                }
+            } catch (Exception e) {
+                accept.setContent("Offer accepted.");
+            }
+            
             myAgent.send(accept);
         }
     }

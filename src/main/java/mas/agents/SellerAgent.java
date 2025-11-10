@@ -70,11 +70,28 @@ public class SellerAgent extends Agent {
     protected void setup() {
         logger.info("Seller Agent {} is ready.", getAID().getName());
         setupSellerPreferences();
+        startNegotiationFSM();
+    }
 
+    /**
+     * Cria e adiciona uma nova FSM para negociação.
+     * Este método é chamado no setup e também após cada negociação terminar,
+     * permitindo que o SellerAgent atenda múltiplas negociações.
+     */
+    private void startNegotiationFSM() {
+        // Reseta variáveis de estado para nova negociação
+        buyerAgent = null;
+        receivedCounterMsg = null;
+        currentRound = 0;
+        negotiationId = null;
+        initialRequestMsg = null;
+        
         FSMBehaviour fsm = new FSMBehaviour(this) {
             @Override
             public int onEnd() {
                 logger.info("{}: FSM finished.", myAgent.getLocalName());
+                // Re-adiciona uma nova FSM para aceitar novas negociações
+                startNegotiationFSM();
                 return super.onEnd();
             }
         };
@@ -101,7 +118,6 @@ public class SellerAgent extends Agent {
 
         addBehaviour(fsm);
     }
-
     private void setupSellerPreferences() {
         ConfigLoader config = ConfigLoader.getInstance();
         this.evalService = new EvaluationService();
@@ -240,7 +256,13 @@ public class SellerAgent extends Agent {
             msg.setInReplyTo(initialRequestMsg.getReplyWith());
             msg.setReplyWith("prop-" + negotiationId + "-" + System.currentTimeMillis());
             try {
+                // Envia o objeto serializado E uma string legível
                 msg.setContentObject(proposal);
+                // Adiciona conteúdo legível para o Sniffer
+                String readableContent = String.format("INITIAL PROPOSAL - Bundle: %s, Price: %.2f", 
+                    initialBid.getProductBundle().getProducts(), 
+                    initialPrice);
+                msg.addUserDefinedParameter("readable-content", readableContent);
                 myAgent.send(msg);
                 logger.info("{}: Sent initial proposal -> Price: {}", myAgent.getLocalName(), initialPrice);
             } catch (IOException e) {
@@ -284,9 +306,10 @@ public class SellerAgent extends Agent {
 
             if (msg != null) {
                 if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
-                    logger.info("{}: Buyer accepted my last offer!", myAgent.getLocalName());
+                    logger.info("{} [R{}]: Buyer ACCEPTED my last offer!", myAgent.getLocalName(), currentRound);
                     nextTransition = 0; // Vai para EndNegotiation
                 } else { // É PROPOSE (contraproposta)
+                    logger.info("{} [R{}]: Received COUNTER-PROPOSAL from buyer.", myAgent.getLocalName(), currentRound);
                     receivedCounterMsg = msg;
                     nextTransition = 1; // Vai para EvaluateCounterProposal
                 }
@@ -391,7 +414,24 @@ public class SellerAgent extends Agent {
             acceptMsg.addReceiver(buyerAgent);
             acceptMsg.setConversationId(negotiationId);
             acceptMsg.setInReplyTo(receivedCounterMsg.getReplyWith());
-            acceptMsg.setContent("Accepted your counter-offer.");
+            
+            // Mensagem legível para o Sniffer
+            try {
+                Proposal receivedP = (Proposal) receivedCounterMsg.getContentObject();
+                if (!receivedP.getBids().isEmpty()) {
+                    Bid acceptedBid = receivedP.getBids().get(0);
+                    Object priceValue = acceptedBid.getIssues().get(0).getValue();
+                    String content = String.format("ACCEPTED - Bundle: %s, Final Price: %s", 
+                        acceptedBid.getProductBundle().getProducts(), 
+                        priceValue);
+                    acceptMsg.setContent(content);
+                } else {
+                    acceptMsg.setContent("Accepted your counter-offer.");
+                }
+            } catch (Exception e) {
+                acceptMsg.setContent("Accepted your counter-offer.");
+            }
+            
             myAgent.send(acceptMsg);
         }
     }

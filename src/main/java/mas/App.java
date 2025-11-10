@@ -13,6 +13,10 @@ public class App {
         p.setParameter(Profile.GUI, "true");
         ContainerController cc = rt.createMainContainer(p);
 
+        // Create and start Sniffer Agent for monitoring
+        AgentController sniffer = cc.createNewAgent("sniffer", "jade.tools.sniffer.Sniffer", new Object[]{});
+        sniffer.start();
+        
         // Create agents
         AgentController httpBridge = cc.createNewAgent("httpbridge", "mas.agents.HttpBridgeAgent", null);
         AgentController ca = cc.createNewAgent("ca", "mas.agents.CoordinatorAgent", null);
@@ -30,5 +34,9 @@ public class App {
         s1.start();
         s2.start();
         s3.start();
+        
+        // Configure Sniffer to automatically monitor agents
+        AgentController snifferConfig = cc.createNewAgent("snifferConfig", "mas.agents.SnifferConfigAgent", null);
+        snifferConfig.start();
     }
 }

@@ -197,6 +197,10 @@ public class CoordinatorAgent extends Agent {
             Object[] args = new Object[]{sellerAgent, getAID()};
             AgentController ac = getContainerController().createNewAgent(buyerName, "mas.agents.BuyerAgent", args);
             ac.start();
+            
+            // Notifica o Sniffer para monitorar o novo BuyerAgent
+            addBuyerToSniffer(buyerName);
+            
         } catch (StaleProxyException e) {
             logger.error("CA: Failed to start buyer {}", buyerName, e);
         }
@@ -241,6 +245,27 @@ public class CoordinatorAgent extends Agent {
                 negotiationResults.clear();
                 finishedCounter = 0;
             }
+        }
+    }
+    
+    /**
+     * Envia mensagem ao Sniffer para monitorar um novo BuyerAgent dinamicamente
+     */
+    private void addBuyerToSniffer(String buyerName) {
+        try {
+            // Aguarda um pouco para garantir que o BuyerAgent foi criado
+            Thread.sleep(100);
+            
+            AID snifferAID = new AID("sniffer", AID.ISLOCALNAME);
+            ACLMessage sniffMsg = new ACLMessage(ACLMessage.REQUEST);
+            sniffMsg.addReceiver(snifferAID);
+            sniffMsg.setOntology("JADE-Sniffer");
+            sniffMsg.setContent(buyerName + ";");
+            send(sniffMsg);
+            
+            logger.debug("CA: Added {} to Sniffer monitoring", buyerName);
+        } catch (InterruptedException e) {
+            logger.warn("CA: Failed to add {} to Sniffer", buyerName, e);
         }
     }
 }
