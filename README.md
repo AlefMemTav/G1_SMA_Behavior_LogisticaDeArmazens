@@ -1,4 +1,4 @@
-# NomeDoProjeto
+# Agente Livre
 
 **Disciplina**: FGA0053 - Sistemas Multiagentes <br>
 **Nro do Grupo (de acordo com a Planilha de Divisão dos Grupos)**: 01<br>
@@ -17,7 +17,14 @@
 Nosso projeto é a implementação melroada em alugn pontos do artifo ()[], que não contém a implementação então nos propomos a implementar, mas basicamente é um sitam multi agente para determiarn o melhor fornecedor dado um conjto de fornecedores, ele utilza parametrso como precço, qualidade ... e vê a sinergia dos produtos coisa que outros artigos não tem e determina um fornecedor vencedor par um conjunto de produtos.
 
 ## Screenshots
-Adicione 2 ou mais screenshots do projeto em termos de interface e/ou funcionamento.
+Front web do sistema:
+![Frontend](assets/print-front.png)
+
+Jade:
+![Jade GUI](assets/print-Jade1.png)
+
+![Jade GUI](assets/print-Jade2.png)
+
 
 ## Instalação 
 - **Linguagem:** Java 11 e Javascript
@@ -66,9 +73,13 @@ O uso é simples defini seus parametros e aguarde o vencedor.
 
 ## Participações
 Apresente, brevemente, como cada membro do grupo contribuiu para o projeto.
-|Nome do Membro | Contribuição | Significância da Contribuição para o Projeto (Excelente/Boa/Regular/Ruim/Nula) | Comprobatórios (ex. links para commits)
-| -- | -- | -- | -- |
-| Fulano  |  Programação dos Fatos da Base de Conhecimento Lógica | Boa | Commit tal (com link)
+| Nome do Membro      | Contribuição                                                                            | Significância da Contribuição para o Projeto (Excelente/Boa/Regular/Ruim/Nula) | Comprobatórios (ex. links para commits)                                    |
+| ------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Artur Henrique Holz | Ajustes TDA e modelos iniciais                                                          | Excelente                                                                      | https://github.com/UnBSMA2025-2/G1_SMA_Behavior_LogisticaDeArmazens/pull/2 |
+| Carlos Eduardo      | Implentacao inicial artigo, front end e documentação                                    | Excelente                                                                      | https://github.com/UnBSMA2025-2/G1_SMA_Behavior_LogisticaDeArmazens/pull/2 |
+| Matheus Pinheiro    | organização e refatoracao, ajustes no algoritmo de winner e negociações e documentações | Excelente                                                                      | https://github.com/UnBSMA2025-2/G1_SMA_Behavior_LogisticaDeArmazens/pull/3 |
+| Pedro Lucas Garcia  | Implementação do protocolo FIPA, lógica de contra proposta                              | Excelente                                                                      | https://github.com/UnBSMA2025-2/G1_SMA_Behavior_LogisticaDeArmazens/pull/1 |
+| Vitor Feijó         | implementação artigo, ajustes comunicação e ajustes ambientação maven                   | Excelente                                                                      | https://github.com/UnBSMA2025-2/G1_SMA_Behavior_LogisticaDeArmazens/commit/22d776cf48ef5412e4e1180c06c42a8b1e490804                                                                           |
 
 ## Outros 
 Quaisquer outras informações sobre o projeto podem ser descritas aqui. Não esqueça, entretanto, de informar sobre:
