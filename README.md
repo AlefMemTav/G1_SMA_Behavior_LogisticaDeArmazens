@@ -1,5 +1,8 @@
 # Agente Livre
 
+<img alt="agente_livre" src="https://github.com/user-attachments/assets/87d65a82-9fc1-48cb-830d-29f7a92f4964" />
+
+
 **Disciplina**: FGA0053 - Sistemas Multiagentes <br>
 **Nro do Grupo (de acordo com a Planilha de Divisão dos Grupos)**: 01<br>
 **Frente de Pesquisa**: Logística e cadeia de suprimentos<br>
